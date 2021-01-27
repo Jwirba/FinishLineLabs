@@ -19,7 +19,7 @@ Parameters:
   AmiId:
     Description: Amazon EC2 AMI
     Type: String
-    Default: ami-amazon-linux-latest  
+    Default: ami-0080e4c5bc078760e  
   SSHLocation:
     Description: The IP address range that can be used to SSH to the EC2 instances
     Type: String
@@ -46,13 +46,6 @@ Resources:
           FromPort: '22'
           ToPort: '22'
           CidrIp: !Ref SSHLocation
-  IPAddress:
-    Type: AWS::EC2::EIP
-  IPAssoc:
-    TYPE: AWS::EC2::EIPAssociation
-    Properties:
-      InstanceId: !ref JudeInstance
-      EIP: !Ref IPAddress
 Outputs:
   InstanceId:
     Description: InstanceId of the newly created EC2 instance
@@ -60,10 +53,10 @@ Outputs:
   AZ:
     Description: Availability Zone of the newly created EC2 instance
     Value: !GetAtt 
-      - EC2Instance
+      - JudeInstance
       - AvailabilityZone
   PublicIP:
     Description: Public IP address of the newly created EC2 instance
     Value: !GetAtt 
-      - EC2Instance
+      - JudeInstance
       - IPAdress 
