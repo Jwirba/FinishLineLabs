@@ -14,7 +14,7 @@ Parameters:
   InstanceType:
     Description: JoeWordPress EC2 instance type
     Type: String
-    Default: t2.micro
+    Default: t2.small
     AllowedValues:
     - t2.nano
     - t2.micro
@@ -64,11 +64,11 @@ Parameters:
     Type: String
     MinLength: '9'
     MaxLength: '18'
-    Default: 0.0.0.0/0
+    Default: 67.252.30.176/32
     AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
     ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
   DBName:
-    Default: wordpressdb
+    Default: Wordpress
     Description: The WordPress database name
     Type: String
     MinLength: '1'
@@ -104,7 +104,7 @@ Parameters:
     Type: String
     Default: ami-0080e4c5bc078760e  
 Resources:
-  JoeWordPressSecurityGroup:
+  JudeWordPressSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
       GroupDescription: >-
@@ -119,7 +119,7 @@ Resources:
           FromPort: '22'
           ToPort: '22'
           CidrIp: !Ref SSHLocation
-  JoeWordPress:
+  JudeWordPress:
     Type: 'AWS::EC2::Instance'
     Metadata:
       'AWS::CloudFormation::Init':
@@ -154,11 +154,11 @@ Resources:
                   - |
                     triggers=post.update
                   - |
-                    path=Resources.JoeWordPress.Metadata.AWS::CloudFormation::Init
+                    path=Resources.JudeWordPress.Metadata.AWS::CloudFormation::Init
                   - 'action=/opt/aws/bin/cfn-init -v '
                   - '         --stack '
                   - !Ref 'AWS::StackName'
-                  - '         --resource JoeWordPress '
+                  - '         --resource JudeWordPress '
                   - '         --configsets wordpress_install '
                   - '         --region '
                   - !Ref 'AWS::Region'
@@ -178,12 +178,12 @@ Resources:
         install_wordpress:
           packages:
             yum:
-              php73: []
-              php73-mysqlnd: []
-              mysql57: []
-              mysql57-server: []
-              mysql57-devel: []
-              mysql57-libs: []
+              php80: []
+              php80-mysqlnd: []
+              mysql80: []
+              mysql80-server: []
+              mysql80-devel: []
+              mysql80-libs: []
               httpd24: []
           sources:
             /var/www/html: 'http://wordpress.org/latest.tar.gz'
@@ -220,15 +220,15 @@ Resources:
                   - >
                     cp /var/www/html/wordpress/wp-config-sample.php
                     /var/www/html/wordpress/wp-config.php
-                  - sed -i "s/'database_name_here'/'
+                  - sed -i "s/'Wordpress'/'
                   - !Ref DBName
                   - |
                     '/g" wp-config.php
-                  - sed -i "s/'username_here'/'
+                  - sed -i "s/'Wordpress'/'
                   - !Ref DBUser
                   - |
                     '/g" wp-config.php
-                  - sed -i "s/'password_here'/'
+                  - sed -i "s/'password'/'
                   - !Ref DBPassword
                   - |
                     '/g" wp-config.php
@@ -278,11 +278,11 @@ Resources:
       ImageId: !Ref AmiId
       InstanceType: !Ref InstanceType
       SecurityGroups:
-        - !Ref JoeWordPressSecurityGroup
+        - !Ref JudeWordPressSecurityGroup
       KeyName: !Ref KeyName
       Tags:
         - Key: Value
-          Value: JoeWordPress
+          Value: JudeWordPress
       UserData: !Base64 
         'Fn::Join':
           - ''
@@ -293,7 +293,7 @@ Resources:
             - '/opt/aws/bin/cfn-init -v '
             - '         --stack '
             - !Ref 'AWS::StackName'
-            - '         --resource JoeWordPress '
+            - '         --resource JudeWordPress '
             - '         --configsets wordpress_install '
             - '         --region '
             - !Ref 'AWS::Region'
@@ -302,7 +302,7 @@ Resources:
             - '/opt/aws/bin/cfn-signal -e $? '
             - '         --stack '
             - !Ref 'AWS::StackName'
-            - '         --resource JoeWordPress '
+            - '         --resource JudeWordPress '
             - '         --region '
             - !Ref 'AWS::Region'
             - |+
@@ -316,7 +316,7 @@ Outputs:
       - ''
       - - 'http://'
         - !GetAtt 
-          - JoeWordPress
+          - JudeWordPress
           - PublicIp
         - /wordpress
     Description: WordPress Website
@@ -326,7 +326,7 @@ Outputs:
   AZ:
     Description: Availability Zone of the newly created EC2 instance
     Value: !GetAtt 
-      - JoeWordPress
+      - JudeWordPress
       - AvailabilityZone
   PublicIP:
     Description: Public IP address of the newly created EC2 instance
