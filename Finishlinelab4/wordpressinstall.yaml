@@ -281,7 +281,7 @@ Resources:
         - !Ref JudeWordPressSecurityGroup
       KeyName: !Ref KeyName
       Tags:
-        - Key: Value
+        - Key: Name
           Value: JudeWordPress
       UserData: !Base64 
         'Fn::Join':
