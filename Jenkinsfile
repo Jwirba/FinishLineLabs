@@ -9,7 +9,7 @@
     stages {
         stage('AWS build') {
             steps {
-                sh 'aws cloudformation create-stack --template-body file:///var/lib/jenkins/workspace/finishlinelab4_finishlinelab4/Finishlinelab4/wordpressinstall.yaml --stack-name JudeWordPress --parameter ParameterKey=KeyName,ParameterValue=finishlinelab ParameterKey=InstanceType,ParameterValue=t2.small ParameterKey=DBName,ParameterValue=wordpress ParameterKey=DBUser,ParameterValue=wordpress ParameterKey=DBPassword,ParameterValue=password0# ParameterKey=DBRootPassword,ParameterValue=password0#'
+                sh "aws cloudformation create-stack --template-body 'file:///var/lib/jenkins/workspace/finishlinelab4_finishlinelab4/Finishlinelab4/wordpressinstall.yaml' --stack-name JudeWordPress --parameter 'file:///var/lib/jenkins/workspace/parameter.json'"
             }
         }
         stage('Build') {
