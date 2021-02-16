@@ -322,7 +322,7 @@ Outputs:
     Description: WordPress Website
   InstanceId:
     Description: InstanceId of the newly created EC2 instance
-    Value: !Ref EC2Instance
+    Value: !Ref JudeWordPress
   AZ:
     Description: Availability Zone of the newly created EC2 instance
     Value: !GetAtt 
