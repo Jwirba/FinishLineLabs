@@ -2,8 +2,8 @@
     agent any
 
     environment {
-        AWS_ACCESS_KEY_ID     = credentials('jenkins_aws_key')
-        AWS_SECRET_ACCESS_KEY = credentials('jenkins_aws_key')
+        AWS_ACCESS_KEY_ID     = credentials('jenkins_aws_connection')
+        AWS_SECRET_ACCESS_KEY = credentials('jenkins_aws_connection')
         AWS_DEFAULT_REGION= ('us-east-1')
     }
     stages {
